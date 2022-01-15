@@ -8,8 +8,8 @@ FRONT_IN1 = PWM(Pin(1))
 FRONT_IN2 = PWM(Pin(6))
 BACK_IN1 = PWM(Pin(2))
 BACK_IN2 = PWM(Pin(3))
-STEER_IN1 = PWM(Pin(5))
-STEER_IN2 = PWM(Pin(6))
+STEER_IN1 = PWM(Pin(4))
+STEER_IN2 = PWM(Pin(5))
 
 FRONT_IN1.freq(100)
 FRONT_IN2.freq(100)
@@ -65,6 +65,8 @@ def stop():
     FRONT_IN2.duty_u16(0)
     BACK_IN1.duty_u16(0)
     BACK_IN2.duty_u16(0)
+    STEER_IN1.duty_u16(0)
+    STEER_IN2.duty_u16(0)
 
 
 class USB:
@@ -135,8 +137,9 @@ class USB:
 
 def main():
     usb = USB()
-    
     start_new_thread(usb.buffer_stdin, ())
+    
+    stop()
     
     while True:
         input_msg = usb.get_line_buffer()
@@ -155,7 +158,6 @@ def main():
                 right_back(linear_rate, steer_rate)
             if command == 's':
                 stop()
-            print(command)
         sleep_ms(10)
 
 main()
